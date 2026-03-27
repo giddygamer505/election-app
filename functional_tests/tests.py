@@ -1,17 +1,15 @@
-import os
 import time
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
-from django.urls import reverse
-from unittest import skip
+from election.models import Candidate
 
 class visit_web(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Chrome()
+        Candidate.objects.create(name="Julius Caesar", votes=0)
 
     def tearDown(self):
         self.browser.quit()
@@ -27,7 +25,7 @@ class visit_web(StaticLiveServerTestCase):
         
         #They see the first candidate name as a link (Julius Caesar)
         first_candidate = self.browser.find_element(By.TAG_NAME,'h3')
-        self.assertEqual('Julius Caesar',first_candidate.text)
+        self.assertEqual('Julius Caesar ( คะแนนปัจจุบัน : 0 )',first_candidate.text)
         time.sleep(1)
         
         #He see button to vote
@@ -41,8 +39,9 @@ class visit_web(StaticLiveServerTestCase):
         header = self.browser.find_element(By.TAG_NAME,'h1')
         self.assertIn('Election',header.text)
         
+        #Julius's vote point update
         first_candidate = self.browser.find_element(By.TAG_NAME,'h3')
-        self.assertEqual('Julius Caesar',first_candidate.text)
+        self.assertEqual('Julius Caesar ( คะแนนปัจจุบัน : 1 )' ,first_candidate.text)
         time.sleep(1)
 
         submit_btn = self.browser.find_element(By.TAG_NAME,'button')

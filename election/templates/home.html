@@ -7,10 +7,15 @@
 </head>
 <body>
     <h1>Election</h1>
-    <h3>Julius Caesar</h3>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Vote</button>
-    </form>
+    {% for candidate in candidates %}
+    <div>
+        <h3>{{ candidate.name }} ( คะแนนปัจจุบัน : {{ candidate.votes }} )</h3>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="candidate_id" value="{{ candidate.id }}">
+            <button type="submit" >Vote</button>
+        </form>
+    </div>
+    {% endfor %}
 </body>
 </html>
