@@ -34,5 +34,19 @@ class visit_web(StaticLiveServerTestCase):
         submit_btn = self.browser.find_element(By.TAG_NAME,'button')
         self.assertEqual(submit_btn.text,"Vote")
 
+        #He click the button
+        submit_btn.click()
+
+        #He redirect to same page
+        header = self.browser.find_element(By.TAG_NAME,'h1')
+        self.assertIn('Election',header.text)
+        
+        first_candidate = self.browser.find_element(By.TAG_NAME,'h3')
+        self.assertEqual('Julius Caesar',first_candidate.text)
+        time.sleep(1)
+
+        submit_btn = self.browser.find_element(By.TAG_NAME,'button')
+        self.assertEqual(submit_btn.text,"Vote")
+        submit_btn.click()
         
 

@@ -8,6 +8,9 @@
 <body>
     <h1>Election</h1>
     <h3>Julius Caesar</h3>
-    <button type="submit">Vote</button>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Vote</button>
+    </form>
 </body>
 </html>
