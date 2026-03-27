@@ -16,60 +16,65 @@ class visit_web(StaticLiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
-
-    @skip
+        
     def test_people_see_candidates(self):
-        #people use the web-app "Election"
-        self.browser.get(self.live_server_url)
-        self.assertIn('Election', self.browser.title)
+            #people use the web-app "Election"
+            self.browser.get(self.live_server_url)
 
-        #They see a big "Election" text
-        header = self.browser.find_element(By.TAG_NAME,'h1')
-        self.assertIn('Election',header.text)
-        
-        #They see the first candidate name as a link (Julius Caesar)
-        first_candidate = self.browser.find_element(By.TAG_NAME,'h3')
-        self.assertEqual('Julius Caesar ( คะแนนปัจจุบัน : 0 )',first_candidate.text)
-        time.sleep(1)
-        
-        #He see button to vote
-        submit_btn = self.browser.find_element(By.TAG_NAME,'button')
-        self.assertEqual(submit_btn.text,"Vote")
+            id_box = self.browser.find_element(By.NAME, 'voter_id')
+            id_box.send_keys('USER123')
+            self.browser.find_element(By.TAG_NAME, 'button').click()
 
-        #He click the button
-        submit_btn.click()
+            self.assertIn('Election', self.browser.title)
+            #They see a big "Election" text
+            header = self.browser.find_element(By.TAG_NAME,'h1')
+            self.assertIn('Election',header.text)
+            
+            #They see the first candidate name as a link (Julius Caesar)
+            first_candidate = self.browser.find_element(By.TAG_NAME,'h3')
+            self.assertEqual('Julius Caesar ( คะแนนปัจจุบัน : 0 )',first_candidate.text)
+            time.sleep(1)
+            
+            #He see button to vote
+            submit_btn = self.browser.find_element(By.TAG_NAME,'button')
+            self.assertEqual(submit_btn.text,"Vote")
 
-        #He redirect to same page
-        header = self.browser.find_element(By.TAG_NAME,'h1')
-        self.assertIn('Election',header.text)
-        
-        #Julius's vote point update
-        first_candidate = self.browser.find_element(By.TAG_NAME,'h3')
-        self.assertEqual('Julius Caesar ( คะแนนปัจจุบัน : 1 )' ,first_candidate.text)
-        time.sleep(1)
+            #He click the button
+            submit_btn.click()
 
-        submit_btn = self.browser.find_element(By.TAG_NAME,'button')
-        self.assertEqual(submit_btn.text,"Vote")
-        submit_btn.click()
-        
+            #He redirect to same page
+            header = self.browser.find_element(By.TAG_NAME,'h1')
+            self.assertIn('Election',header.text)
+            
+            #Julius's vote point update
+            first_candidate = self.browser.find_element(By.TAG_NAME,'h3')
+            self.assertEqual('Julius Caesar ( คะแนนปัจจุบัน : 1 )' ,first_candidate.text)
+            time.sleep(1)
+
+            submit_btn = self.browser.find_element(By.TAG_NAME,'button')
+            self.assertEqual(submit_btn.text,"Vote")
+            submit_btn.click()
+            time.sleep(1)
+
     def test_people_see_login(self):
-        self.browser.get(self.live_server_url)
-        self.assertIn('Election', self.browser.title)
+            self.browser.get(self.live_server_url)
+            self.assertIn('Election', self.browser.title)
 
-        header = self.browser.find_element(By.TAG_NAME, 'h1')
-        self.assertEqual('Login', header.text)
+            header = self.browser.find_element(By.TAG_NAME, 'h1')
+            self.assertEqual('Login', header.text)
 
-        id_box = self.browser.find_element(By.NAME,'voter_id')
-        self.assertEqual(id_box.get_attribute('placeholder'), "กรอก ID ของคุณ")
-        
-        id_box.clear()
-        id_box.send_keys('1234')
-        time.sleep(2)
+            id_box = self.browser.find_element(By.NAME,'voter_id')
+            self.assertEqual(id_box.get_attribute('placeholder'), "กรอก ID ของคุณ")
+            
+            id_box.clear()
+            id_box.send_keys('1234')
+            time.sleep(2)
 
-        submit_btn = self.browser.find_element(By.TAG_NAME,'button')
-        submit_btn.click()
+            submit_btn = self.browser.find_element(By.TAG_NAME,'button')
+            submit_btn.click()
 
-        header_home = self.browser.find_element(By.TAG_NAME, 'h1')
-        self.assertEqual('Election', header_home.text)
+            header_home = self.browser.find_element(By.TAG_NAME, 'h1')
+            self.assertEqual('Election', header_home.text)
+            time.sleep(1)
 
 
