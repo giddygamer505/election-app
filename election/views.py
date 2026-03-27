@@ -23,10 +23,7 @@ def home_view(request):
         return redirect('home')
 
     candidates = Candidate.objects.all()
-    return render(request, 'home.html', {
-        'candidates': candidates, 
-        'voter_id': v_id
-    })
+    return render(request, 'home.html', {'candidates': candidates, 'voter_id': v_id})
 
 def login_view(request):
     if 'voter_id' in request.session:
