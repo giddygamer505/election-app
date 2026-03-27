@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Candidate
+from .models import Candidate,Voter
 from django.urls import reverse
 
 class HomePageTest(TestCase):
@@ -24,9 +24,27 @@ class HomePageTest(TestCase):
         self.client.post(self.url, {'voter_id': v_id, 'candidate_id': candidate.id})
         
         self.client.post(self.url, {'voter_id': v_id, 'candidate_id': candidate.id})
-        
+
         candidate.refresh_from_db()
         self.assertEqual(candidate.votes, 1)
+
+class LoginViewTest(TestCase):
+    def setUp(self):
+        self.login_url = reverse('login')
+        self.home_url = reverse('home')
+
+    def test_login_page_renders_correct_template(self):
+        response = self.client.get(self.login_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'login.html')
+
+    def test_login_stores_id_in_session(self):
+        v_id = 'VOTER-123'
+        response = self.client.post(self.login_url, {'voter_id': v_id})
+
+        self.assertEqual(self.client.session['voter_id'], v_id)
+
+        self.assertRedirects(response, self.home_url)
 
 class CandidateModelTest(TestCase):
     def test_candidate_creation(self):

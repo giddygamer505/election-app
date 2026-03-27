@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
-from .models import Candidate
+from .models import Candidate,Voter
+from django.contrib import messages
 
 # Create your views here.
 def home_view(request):
