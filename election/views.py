@@ -8,7 +8,7 @@ def home_view(request):
         candidate = Candidate.objects.get(id=candidate_id)
         candidate.votes += 1
         candidate.save()
-        return redirect('.') 
+        return redirect('home') 
     
     candidates = Candidate.objects.all()
     return render(request,'home.html',{'candidates' : candidates})

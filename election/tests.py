@@ -1,10 +1,21 @@
 from django.test import TestCase
 from .models import Candidate
+from django.urls import reverse
 
 class HomePageTest(TestCase):
-    def test_uses_home_template(self):
-        response = self.client.get('/')
-        self.assertTemplateUsed(response, 'home.html')
+    def setUp(self):
+        self.candidate = Candidate.objects.create(name="John Roblox", votes=0)
+        self.url = reverse('home') 
+
+    def test_vote_increases_score(self):
+        response = self.client.post(self.url, {'candidate_id': self.candidate.id})
+        self.candidate.refresh_from_db()
+        self.assertEqual(self.candidate.votes, 1)
+
+    def test_redirect_after_vote(self):
+        response = self.client.post(self.url, {'candidate_id': self.candidate.id})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, self.url)
 
 class CandidateModelTest(TestCase):
     def test_candidate_creation(self):
