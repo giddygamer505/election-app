@@ -6,3 +6,10 @@ class Candidate(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Voter(models.Model):
+    voter_id = models.CharField(max_length=20, unique=True)
+    has_voted = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.voter_id
