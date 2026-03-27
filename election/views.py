@@ -12,3 +12,6 @@ def home_view(request):
     
     candidates = Candidate.objects.all()
     return render(request,'home.html',{'candidates' : candidates})
+
+def login_view(request):
+    return render(request,'login.html')   
