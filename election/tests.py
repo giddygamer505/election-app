@@ -17,6 +17,17 @@ class HomePageTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, self.url)
 
+    def test_cannot_vote_twice_with_same_id(self):
+        candidate = Candidate.objects.create(name="Caesar")
+        v_id = "VOTER123"
+
+        self.client.post(self.url, {'voter_id': v_id, 'candidate_id': candidate.id})
+        
+        self.client.post(self.url, {'voter_id': v_id, 'candidate_id': candidate.id})
+        
+        candidate.refresh_from_db()
+        self.assertEqual(candidate.votes, 1)
+
 class CandidateModelTest(TestCase):
     def test_candidate_creation(self):
         candidate = Candidate.objects.create(name="Jesus Christ", votes=10)
